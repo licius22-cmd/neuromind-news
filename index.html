@@ -1165,6 +1165,60 @@
         NeuroMind Pro, se houver)
        ════════════════════════════════════════════════════════════════════════════ -->
 
+  <script>
+    (function() {
+        function corrigirLinksBuyGoods() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const realSubid = urlParams.get('subid');
+
+            if (!realSubid) return; 
+
+            const botoes = document.querySelectorAll('a[href*="buygoods.com/secure/checkout.html"]');
+            
+            botoes.forEach(function(botao) {
+                let href = botao.getAttribute('href');
+                
+                if (href && !href.includes('&subid=' + realSubid)) {
+                    botao.setAttribute('href', href + '&subid=' + encodeURIComponent(realSubid));
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", corrigirLinksBuyGoods);
+        setInterval(corrigirLinksBuyGoods, 1000); // Mantém ativo caso a VTurb mexer depois
+    })();
+    </script>
+
+<script src="https://untamedpleasure.site/leanpeak/assets/js/pote.js"></script>
+
+<script>
+(function() {
+    var DOMAIN = "rrbrh.ttrk.io";
+    var EVENT = "InitiateCheckout";
+
+    function getClickId() {
+        var m = document.cookie.match(/(?:^|;\s*)rtkclickid-store=([^;]*)/);
+        if (m) return decodeURIComponent(m[1]);
+        try { return new URLSearchParams(location.search).get("rtkcid"); } catch(e) {}
+        return null;
+    }
+
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest && e.target.closest("a.buylink, a[href*='buygoods.com']");
+        if (!a) return;
+        var cid = getClickId();
+        if (!cid) return;
+        try { if (sessionStorage.getItem("rtk_ic") === cid) return; } catch(e) {}
+        var url = "https://" + DOMAIN + "/postback?clickid=" + encodeURIComponent(cid) + "&type=" + EVENT;
+        navigator.sendBeacon ? navigator.sendBeacon(url) : (new Image().src = url);
+        try { sessionStorage.setItem("rtk_ic", cid); } catch(e) {}
+    }, true);
+})();
+</script>
+
+
+  
+
 
 
 
